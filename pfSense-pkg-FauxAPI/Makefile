@@ -69,5 +69,7 @@ do-install:
 		${STAGEDIR}${DATADIR}
 	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
 		${STAGEDIR}${DATADIR}/info.xml
+    @${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
+		${STAGEDIR}/etc/inc/fauxapi/fauxapi_actions.inc
 
 .include <bsd.port.mk>

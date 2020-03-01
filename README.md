@@ -8,6 +8,7 @@ tasks feasible.
 
 
 ## API Action Summary
+ - [api_version](#api_version) - Gets the API version.
  - [alias_update_urltables](#user-content-alias_update_urltables) - Causes the pfSense host to immediately update any urltable alias entries from their (remote) source URLs.
  - [config_backup](#user-content-config_backup) - Causes the system to take a configuration backup and add it to the regular set of system change backups.
  - [config_backup_list](#user-content-config_backup_list) - Returns a list of the currently available system configuration backups.
@@ -303,6 +304,34 @@ NB: the cURL requests below use the '--insecure' switch because many pfSense
 deployments do not deploy certificate chain signed SSL certificates.  A reasonable 
 improvement in this regard might be to implement certificate pinning at the 
 client side to hence remove scope for man-in-middle concerns.
+
+---
+### api_version
+ - Gets the API version.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=api_version"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "598ec756b4d09",
+    "action": "alias_update_urltables",
+    "message": "ok",
+    "data": {
+        "version": "1.30_1"
+    }
+}
+```
 
 ---
 ### alias_update_urltables

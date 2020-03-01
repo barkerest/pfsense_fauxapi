@@ -36,6 +36,15 @@ class fauxApiActions {
     }
     
     /**
+     * api_version()
+     *
+     * @return string
+     */
+    public function api_version() {
+        return [ 'version' => '%%PKGVERSION%%' ];
+    }
+    
+    /**
      * config_get()
      * 
      * @param array $__args
