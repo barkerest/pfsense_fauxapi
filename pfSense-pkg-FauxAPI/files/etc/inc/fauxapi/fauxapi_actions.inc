@@ -41,7 +41,11 @@ class fauxApiActions {
      * @return string
      */
     public function api_version() {
-        return [ 'version' => '%%PKGVERSION%%' ];
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'version' => '%%PKGVERSION%%');
+        return TRUE;
     }
     
     /**
