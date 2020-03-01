@@ -331,13 +331,13 @@ curl \
   "message": "ok",
   "data": {
     "updates": [
-      {
-		"name": "bruteforceblocker",
-        "url": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset",
-        "status": [
-          "no changes."
-        ]
-      }
+        {
+            "name": "bruteforceblocker",
+            "url": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset",
+            "status": [
+                "no changes."
+            ]
+        }
     ]
   }
 }
