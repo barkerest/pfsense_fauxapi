@@ -330,14 +330,15 @@ curl \
   "action": "alias_update_urltables",
   "message": "ok",
   "data": {
-    "updates": {
-      "bruteforceblocker": {
+    "updates": [
+      {
+		"name": "bruteforceblocker",
         "url": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset",
         "status": [
           "no changes."
         ]
       }
-    }
+    ]
   }
 }
 ```

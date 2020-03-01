@@ -714,7 +714,7 @@ class fauxApiPfsenseInterface {
         
         $updates = array();
         foreach ($urltables as $urltablename => $urltable) {
-            $updates[$urltablename] = array('url' => $urltable['url']);
+			$update = ['name'=>$urltablename, 'url' => $urltable['url']];
             if (empty($table) || $table === $urltablename) {
                 $result = \process_alias_urltable(
                     $urltablename, $urltable['type'], $urltable['url'], $urltable['updatefreq'], TRUE
@@ -724,10 +724,11 @@ class fauxApiPfsenseInterface {
                     if ($urltable['type'] === 'urltable') {
                         exec("/sbin/pfctl -t " . escapeshellarg($urltablename) . " -T replace -f /var/db/aliastables/" . escapeshellarg($urltablename) . ".txt 2>&1", $exec_return);
                     }
-                    $updates[$urltablename]['status'] = $exec_return;
+                    $update['status'] = $exec_return;
                     fauxApiLogger::debug('Updated '.$urltablename.' content from '.$urltable['url'], $exec_return);
                 }
             }
+			$updates[] = $update;
         }
         return $updates;
     }
