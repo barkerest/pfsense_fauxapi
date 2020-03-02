@@ -67,13 +67,13 @@ now provides the ability to issue function calls directly into pfSense.*
 
 
 ## Installation
-Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to 
+This package will likely never make it to the pfSense FreeBSD-ports tree, you will need to 
 install manually from **root** as shown:-
 ```bash
-set fauxapi_base_package_url='https://raw.githubusercontent.com/ndejong/pfsense_fauxapi_packages/master'
-set fauxapi_latest=`fetch -qo - ${fauxapi_base_package_url}/LATEST`
-fetch ${fauxapi_base_package_url}/${fauxapi_latest}
-pkg-static install ${fauxapi_latest}
+set PFFA_PKG_URL='https://raw.githubusercontent.com/barkerest/pfsense_fauxapi/master/packages'
+set PFFA_PKG_NAME=`fetch -qo - ${PFFA_PKG_URL}/LATEST`
+fetch ${PFFA_PKG_URL}/${PFFA_PKG_NAME}
+pkg-static install ${PFFA_PKG_NAME}
 ```
 
 Installation and de-installation is quite straight forward, further examples can 
@@ -1043,6 +1043,7 @@ pfSense test infrastructure if it already exists.*
 ## FauxAPI License
 ```
 Copyright 2016-2019 Nicholas de Jong
+Copyright 2020 Beau Barker
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
