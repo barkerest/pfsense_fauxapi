@@ -1,10 +1,16 @@
-# FauxAPI - v1.3
+# FauxAPI - v1.3.f38
 A REST API interface for pfSense 2.3.x and 2.4.x to facilitate devops:-
- - https://github.com/ndejong/pfsense_fauxapi
+ - https://github.com/barkerest/pfsense_fauxapi
 
-Additionally available are a set of [client libraries](#client-libraries) 
-that hence make programmatic access and management of pfSense hosts for devops 
-tasks feasible.
+This is a fork of [FauxAPI 1.3](https://github.com/ndejong/pfsense_fauxapi) initially created to 
+generate the 1.3_6 package, but then extended to include additional
+functionality and fixes needed to make it work smoothly with my 
+[pfSenseFauxAPI.Net](https://github.com/barkerest/PfSenseFauxApi.Net) library.
+
+The version "f38" refers to this being fork number 38 of the original repo at the time I created the fork.
+This version string will serve to differentiate my version from the original version.  My version is not
+API compatible with the original version.  As such, the original client libraries may not work with my
+version.
 
 
 ## API Action Summary
@@ -83,7 +89,14 @@ pfSense host before you continue, see the API Authentication section below.
 
 ## Client libraries
 
+#### .NET Core
+A [.NET Core interface](https://github.com/barkerest/PfSenseFauxApi.Net) to pfSense was my most
+desired end-goal.  The original FauxAPI was a good starting point.  The .Net Core interface will
+be installable via nuget once released.
+
+
 #### Python
+**CAUTION:** The f38 API version may not function with this library.  
 A [Python interface](https://github.com/ndejong/pfsense_fauxapi_client_python) 
 to pfSense was perhaps the most desired end-goal at the onset of the FauxAPI 
 package project.  Anyone that has tried to parse the pfSense `config.xml` files 
@@ -122,6 +135,7 @@ system, not just the entire system configuration as with the Bash library.
    confirm operation.  
 
 #### Command Line
+**CAUTION:** The f38 API version may not function with this library.  
 As distinct from the Bash library as described below the Python pip also introduces
 a command-line tool to interact with the API, which makes a wide range of actions
 possible directly from the command line, for example
@@ -130,6 +144,7 @@ fauxapi --host 192.168.1.200 gateway_status | jq .
 ```
 
 #### Bash
+**CAUTION:** The f38 API version may not function with this library.  
 The [Bash client library](https://github.com/ndejong/pfsense_fauxapi_client_bash) 
 makes it possible to add a line with `source pfsense-fauxapi.sh` to your bash script 
 and then access a pfSense host configuration directly as a JSON string
@@ -147,11 +162,13 @@ It is recommended to review the commented out samples in the provided
 idea on usage.
 
 #### NodeJS/TypeScript
+**CAUTION:** The f38 API version may not function with this library.  
 A NodeJS client has been developed by a third party and is available here
  - NPMJS: [npmjs.com/package/faux-api-client](https://www.npmjs.com/package/faux-api-client)
  - Github: [github.com/Elucidia/faux-api-client](https://github.com/Elucidia/faux-api-client)
 
 #### PHP
+**CAUTION:** The f38 API version may not function with this library.  
 A PHP client has been developed by a third party and is available here
  - Packagist: [packagist.org/packages/travisghansen/pfsense_fauxapi_php_client](https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client)
  - Github: [github.com/travisghansen/pfsense_fauxapi_php_client](https://github.com/travisghansen/pfsense_fauxapi_php_client)

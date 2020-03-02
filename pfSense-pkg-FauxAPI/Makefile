@@ -1,14 +1,14 @@
 # $FreeBSD$
 
-PORTNAME=	pfSense-pkg-FauxAPI
-PORTVERSION=	1.30
+PORTNAME=		pfSense-pkg-FauxAPI
+PORTVERSION=	1.3.f38
 PORTREVISION=	1
-CATEGORIES=	sysutils
+CATEGORIES=		sysutils
 MASTER_SITES=	# empty
-DISTFILES=	# empty
+DISTFILES=		# empty
 EXTRACT_ONLY=	# empty
 
-MAINTAINER=	contact@nicholasdejong.com
+MAINTAINER=	beau@barkerest.com
 COMMENT=	pfSense package FauxAPI
 
 LICENSE=	APACHE20

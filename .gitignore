@@ -1,4 +1,4 @@
 /_dev
 /.idea
-/nbproject
 *.pyc
+/pfSense-pkg-FauxAPI/work
