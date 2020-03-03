@@ -399,9 +399,13 @@ class fauxApiActions {
         $stats = $this->PfsenseInterface->interface_stats($interface);
         
         if (empty($stats)) {
-            $this->response->http_code = 500;
-            $this->response->message = 'unable to get interface stats';
-            return FALSE;
+            $stats = [
+                'success' => false
+            ];
+        }
+        else
+        {
+            $stats['success'] = true;
         }
         $this->response->http_code = 200;
         $this->response->message = 'ok';
