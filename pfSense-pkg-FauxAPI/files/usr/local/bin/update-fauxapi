@@ -1,0 +1,7 @@
+#/bin/csh
+
+cd /root
+set PFFA_PKG_URL='https://raw.githubusercontent.com/barkerest/pfsense_fauxapi/master/packages'
+set PFFA_PKG_NAME=`fetch -qo - ${PFFA_PKG_URL}/LATEST`
+fetch ${PFFA_PKG_URL}/${PFFA_PKG_NAME}
+pkg-static install ${PFFA_PKG_NAME}
