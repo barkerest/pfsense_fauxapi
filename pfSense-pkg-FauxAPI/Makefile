@@ -2,7 +2,7 @@
 
 PORTNAME=		pfSense-pkg-FauxAPI
 PORTVERSION=	1.3.f38
-PORTREVISION=	2
+PORTREVISION=	3
 CATEGORIES=		sysutils
 MASTER_SITES=	# empty
 DISTFILES=		# empty
@@ -51,6 +51,9 @@ do-install:
 
 	${MKDIR} ${STAGEDIR}/usr/local/www/fauxapi/v1
 	${INSTALL_DATA} ${FILESDIR}/usr/local/www/fauxapi/v1/index.php ${STAGEDIR}/usr/local/www/fauxapi/v1
+
+	${MKDIR} ${STAGEDIR}/usr/local/bin
+	${INSTALL_DATA} -m 0755 ${FILESDIR}/usr/local/bin/update-fauxapi ${STAGEDIR}/usr/local/bin
 
 	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" ${STAGEDIR}/usr/local/pkg/fauxapi.xml
 	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" ${STAGEDIR}/usr/local/share/pfSense-pkg-FauxAPI/info.xml

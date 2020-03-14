@@ -27,3 +27,6 @@
 @dir /usr/local/www/fauxapi/v1
 /usr/local/www/fauxapi/v1/index.php
 
+@dir /usr/local/bin
+/usr/local/bin/update-fauxapi
+
