@@ -2,7 +2,7 @@
 
 PORTNAME=		pfSense-pkg-FauxAPI
 PORTVERSION=	1.3.f38
-PORTREVISION=	1
+PORTREVISION=	2
 CATEGORIES=		sysutils
 MASTER_SITES=	# empty
 DISTFILES=		# empty
@@ -23,53 +23,37 @@ do-extract:
 	${MKDIR} ${WRKSRC}
 
 do-install:
-	${MKDIR} ${STAGEDIR}${PREFIX}/pkg
-	${INSTALL_DATA} -m 0644 ${FILESDIR}${PREFIX}/pkg/fauxapi.xml \
-		${STAGEDIR}${PREFIX}/pkg
-
-	${MKDIR} ${STAGEDIR}/etc/inc/priv
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/priv/fauxapi.priv.inc \
-		${STAGEDIR}/etc/inc/priv
-
 	${MKDIR} ${STAGEDIR}/etc/fauxapi
-	${INSTALL_DATA} -m 0600 ${FILESDIR}/etc/fauxapi/credentials.sample.ini \
-		${STAGEDIR}/etc/fauxapi
-	${INSTALL_DATA} -m 0644 ${FILESDIR}/etc/fauxapi/pfsense_function_calls.sample.txt \
-		${STAGEDIR}/etc/fauxapi
-
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi/v1
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/index.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1
-
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi/admin
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/about.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/admin
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/credentials.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/admin
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/logs.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/admin
+	${INSTALL_DATA} ${FILESDIR}/etc/fauxapi/credentials.sample.ini ${STAGEDIR}/etc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/fauxapi/pfsense_function_calls.sample.txt ${STAGEDIR}/etc/fauxapi
 
 	${MKDIR} ${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_actions.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_auth.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_logger.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_pfsense_interface.inc \
-		${STAGEDIR}/etc/inc/fauxapi
-	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_utils.inc \
-		${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc ${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_actions.inc ${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_auth.inc ${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_logger.inc ${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_pfsense_interface.inc ${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_utils.inc ${STAGEDIR}/etc/inc/fauxapi
 
-	${MKDIR} ${STAGEDIR}${DATADIR}
-	${INSTALL_DATA} ${FILESDIR}${DATADIR}/info.xml \
-		${STAGEDIR}${DATADIR}
-	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
-		${STAGEDIR}${DATADIR}/info.xml
-	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" \
-		${STAGEDIR}/etc/inc/fauxapi/fauxapi_actions.inc
+	${MKDIR} ${STAGEDIR}/etc/inc/priv
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/priv/fauxapi.priv.inc ${STAGEDIR}/etc/inc/priv
+
+	${MKDIR} ${STAGEDIR}/usr/local/pkg
+	${INSTALL_DATA} -m 0644 ${FILESDIR}/usr/local/pkg/fauxapi.xml ${STAGEDIR}/usr/local/pkg
+
+	${MKDIR} ${STAGEDIR}/usr/local/share/pfSense-pkg-FauxAPI
+	${INSTALL_DATA} ${FILESDIR}/usr/local/share/pfSense-pkg-FauxAPI/info.xml ${STAGEDIR}/usr/local/share/pfSense-pkg-FauxAPI
+
+	${MKDIR} ${STAGEDIR}/usr/local/www/fauxapi/admin
+	${INSTALL_DATA} ${FILESDIR}/usr/local/www/fauxapi/admin/about.php ${STAGEDIR}/usr/local/www/fauxapi/admin
+	${INSTALL_DATA} ${FILESDIR}/usr/local/www/fauxapi/admin/credentials.php ${STAGEDIR}/usr/local/www/fauxapi/admin
+	${INSTALL_DATA} ${FILESDIR}/usr/local/www/fauxapi/admin/logs.php ${STAGEDIR}/usr/local/www/fauxapi/admin
+
+	${MKDIR} ${STAGEDIR}/usr/local/www/fauxapi/v1
+	${INSTALL_DATA} ${FILESDIR}/usr/local/www/fauxapi/v1/index.php ${STAGEDIR}/usr/local/www/fauxapi/v1
+
+	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" ${STAGEDIR}/usr/local/pkg/fauxapi.xml
+	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" ${STAGEDIR}/usr/local/share/pfSense-pkg-FauxAPI/info.xml
+	@${REINPLACE_CMD} -i '' -e "s|%%PKGVERSION%%|${PKGVERSION}|" ${STAGEDIR}/etc/inc/fauxapi/fauxapi_actions.inc
 
 .include <bsd.port.mk>

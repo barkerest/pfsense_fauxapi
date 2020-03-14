@@ -1,21 +1,6 @@
-@dir /usr/local/pkg
-/usr/local/pkg/fauxapi.xml
-
-@dir /etc/inc/priv
-/etc/inc/priv/fauxapi.priv.inc
-
 @dir /etc/fauxapi
 /etc/fauxapi/credentials.sample.ini
 /etc/fauxapi/pfsense_function_calls.sample.txt
-
-@dir /usr/local/www/fauxapi
-@dir /usr/local/www/fauxapi/v1
-/usr/local/www/fauxapi/v1/index.php
-
-@dir /usr/local/www/fauxapi/admin
-/usr/local/www/fauxapi/admin/about.php
-/usr/local/www/fauxapi/admin/credentials.php
-/usr/local/www/fauxapi/admin/logs.php
 
 @dir /etc/inc/fauxapi
 /etc/inc/fauxapi/fauxapi.inc
@@ -25,4 +10,20 @@
 /etc/inc/fauxapi/fauxapi_pfsense_interface.inc
 /etc/inc/fauxapi/fauxapi_utils.inc
 
-%%DATADIR%%/info.xml
+@dir /etc/inc/priv
+/etc/inc/priv/fauxapi.priv.inc
+
+@dir /usr/local/pkg
+/usr/local/pkg/fauxapi.xml
+
+@dir /usr/local/share/pfSense-pkg-FauxAPI
+/usr/local/share/pfSense-pkg-FauxAPI/info.xml
+
+@dir /usr/local/www/fauxapi/admin
+/usr/local/www/fauxapi/admin/about.php
+/usr/local/www/fauxapi/admin/credentials.php
+/usr/local/www/fauxapi/admin/logs.php
+
+@dir /usr/local/www/fauxapi/v1
+/usr/local/www/fauxapi/v1/index.php
+
