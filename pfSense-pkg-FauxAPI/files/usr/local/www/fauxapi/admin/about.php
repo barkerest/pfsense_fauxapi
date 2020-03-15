@@ -132,9 +132,7 @@ install manually from <strong>root</strong> as shown:-</p>
 <span class="pl-c1">set</span> PFFA_PKG_NAME=<span class="pl-s"><span class="pl-pds">`</span>fetch -qo - <span class="pl-smi">${PFFA_PKG_URL}</span>/LATEST<span class="pl-pds">`</span></span>
 fetch <span class="pl-smi">${PFFA_PKG_URL}</span>/<span class="pl-smi">${PFFA_PKG_NAME}</span>
 pkg-static install <span class="pl-smi">${PFFA_PKG_NAME}</span></pre></div>
-<p>Installation and de-installation is quite straight forward, further examples can
-be found in the <code>README.md</code> located <a href="https://github.com/ndejong/pfsense_fauxapi_packages">here</a>.</p>
-<p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi_packages/blob/master/SHA256SUMS"><code>SHA256SUMS</code></a></p>
+<p>Refer to the published package <a href="https://github.com/barkerest/pfsense_fauxapi/blob/master/packages/SHA256SUMS"><code>SHA256SUMS</code></a></p>
 <p><strong>Hint:</strong> if not already, consider installing the <code>jq</code> tool on your local machine (not
 pfSense host) to pipe and manage JSON outputs from FauxAPI - <a href="https://stedolan.github.io/jq/" rel="nofollow">https://stedolan.github.io/jq/</a></p>
 <p><strong>NB:</strong> you MUST at least setup your <code>/etc/fauxapi/credentials.ini</code> file on the
