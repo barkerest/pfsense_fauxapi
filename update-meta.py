@@ -135,7 +135,7 @@ class PackageUpdater:
             '--data',
             '@' + tmp_input,
             'https://api.github.com/markdown'
-        ])
+        ], universal_newlines=True)
         head = ''
         tail = ''
         part = 1
