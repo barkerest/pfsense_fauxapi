@@ -23,7 +23,7 @@ class PackageUpdater:
 
     @staticmethod
     def __write_plist(plist_file, dir_list, file_list):
-        with open(plist_file, 'w') as f:
+        with open(plist_file, 'wt') as f:
             for dir_name in dir_list:
                 f.write('@dir %s\n' % dir_name)
                 for file_name in file_list:
@@ -33,7 +33,7 @@ class PackageUpdater:
 
     @staticmethod
     def __update_priv(priv_file, dir_list, file_list, prefix=PKG_INTERNAL_NAME):
-        with open(priv_file, 'r') as f:
+        with open(priv_file, 'rt') as f:
             in_lines = f.readlines()
         priv_name = ''
         # the regular expression to get the privilege name.
@@ -49,7 +49,7 @@ class PackageUpdater:
         priv_line = '$priv_list[\'%s\'][\'match\'][]' % priv_name
         web_root = '/usr/local/www'
         path_start = '%s/%s' % (web_root, prefix)
-        with open(priv_file, 'w') as f:
+        with open(priv_file, 'wt') as f:
             for line in in_lines:
                 if priv_re.match(line):
                     f.write(line)
@@ -68,9 +68,9 @@ class PackageUpdater:
     def __update_makefile(self, makefile, dir_list, file_list, versioned_files, config_file):
         self.package_version = '0.0'
         self.package_revision = 0
-        with open(makefile, 'r') as f:
+        with open(makefile, 'rt') as f:
             in_lines = f.readlines()
-        with open(makefile, 'w') as f:
+        with open(makefile, 'wt') as f:
             skip = False
             for line in in_lines:
                 if line.startswith('do-install:'):
@@ -124,7 +124,7 @@ class PackageUpdater:
         data = {
             'mode': 'markdown'
         }
-        with open(source_md, 'r') as f:
+        with open(source_md, 'rt') as f:
             data['text'] = f.read()
         data = json.dumps(data)
         with open(tmp_input, 'w') as f:
@@ -139,7 +139,7 @@ class PackageUpdater:
         head = ''
         tail = ''
         part = 1
-        with open(target_php, 'r') as f:
+        with open(target_php, 'rt') as f:
             for line in f:
                 if part == 1:
                     head += line
@@ -151,7 +151,7 @@ class PackageUpdater:
                     part = 3
                     tail = line
         data = head + content + tail
-        with open(target_php, 'w') as f:
+        with open(target_php, 'wt') as f:
             f.write(data)
 
     def update_meta(self):
