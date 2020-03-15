@@ -2,3 +2,4 @@
 /.idea
 *.pyc
 /pfSense-pkg-FauxAPI/work
+/venv

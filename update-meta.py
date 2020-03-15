@@ -1,16 +1,18 @@
-
 import os
 import re
 import sys
+import json
+import subprocess
+
 
 class PackageUpdater:
     PKG_NAME = 'pfSense-pkg-FauxAPI'
     PKG_INTERNAL_NAME = 'fauxapi'
 
     def __init__(self, repo_path, bump_rev=False):
-        self.__repo_path = repo_path.replace('\\','/').rstrip('/')
+        self.__repo_path = repo_path.replace('\\', '/').rstrip('/')
         if not self.__repo_path:
-            self.__repo_path = os.getcwd().replace('\\','/').rstrip('/')
+            self.__repo_path = os.getcwd().replace('\\', '/').rstrip('/')
         self.__package_name = ''
         self.__bump_revision = bump_rev
         self.package_version = '0.0'
@@ -95,11 +97,11 @@ class PackageUpdater:
                     f.write('\n')
                 elif not skip:
                     if line.startswith('PORTVERSION'):
-                        _,v = line.split('=', 2)
+                        _, v = line.split('=', 2)
                         self.package_version = v.strip()
                         f.write(line)
                     elif line.startswith('PORTREVISION'):
-                        _,v = line.split('=', 2)
+                        _, v = line.split('=', 2)
                         self.package_revision = int(v.strip())
                         if self.__bump_revision:
                             self.package_revision += 1
@@ -110,6 +112,47 @@ class PackageUpdater:
                 elif line and line.strip() and line[0] != ' ' and line[0] != '\t':
                     skip = False
                     f.write(line)
+
+    def __update_about(self):
+        tmp_input = '/tmp/input.json'
+        source_md = '%s/README.md' % self.__repo_path
+        target_php = '%s/%s/files/usr/local/www/%s/admin/about.php' % (
+            self.__repo_path,
+            self.PKG_NAME,
+            self.PKG_INTERNAL_NAME
+        )
+        data = {
+            'mode': 'markdown'
+        }
+        with open(source_md, 'r') as f:
+            data['text'] = f.read()
+        data = json.dumps(data)
+        with open(tmp_input, 'w') as f:
+            f.write(data)
+        content = subprocess.check_output([
+            '/usr/local/bin/curl',
+            '--silent',
+            '--data',
+            '@' + tmp_input,
+            'https://api.github.com/markdown'
+        ])
+        head = ''
+        tail = ''
+        part = 1
+        with open(target_php, 'r') as f:
+            for line in f:
+                if part == 1:
+                    head += line
+                elif part == 3:
+                    tail += line
+                if 'READMESTART' in line:
+                    part = 2
+                elif 'READMEEND' in line:
+                    part = 3
+                    tail = line
+        data = head + content + tail
+        with open(target_php, 'w') as f:
+            f.write(data)
 
     def update_meta(self):
         # the metadata files we need to update.
@@ -148,6 +191,7 @@ class PackageUpdater:
             self.__write_plist(plist, dir_list, file_list)
             self.__update_priv(priv, dir_list, file_list, '%s/admin' % self.PKG_INTERNAL_NAME)
             self.__update_makefile(makefile, dir_list, file_list, versioned_files, config_file)
+            self.__update_about()
         finally:
             os.chdir(self.__repo_path)
 
@@ -157,4 +201,3 @@ pu = PackageUpdater(os.path.dirname(__file__), bump)
 print('Repo: %s' % pu.repo_path())
 pu.update_meta()
 print('Package Version: %s_%d' % (pu.package_version, pu.package_revision))
-
