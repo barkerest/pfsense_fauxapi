@@ -45,17 +45,24 @@ events.push(function() {
 <div>
 <!--READMESTART-->
 <h1>
-<a id="user-content-fauxapi---v13" class="anchor" href="#fauxapi---v13" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI - v1.3</h1>
+<a id="user-content-fauxapi---v13f38" class="anchor" href="#fauxapi---v13f38" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI - v1.3.f38</h1>
 <p>A REST API interface for pfSense 2.3.x and 2.4.x to facilitate devops:-</p>
 <ul>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi">https://github.com/ndejong/pfsense_fauxapi</a></li>
+<li><a href="https://github.com/barkerest/pfsense_fauxapi">https://github.com/barkerest/pfsense_fauxapi</a></li>
 </ul>
-<p>Additionally available are a set of <a href="#client-libraries">client libraries</a>
-that hence make programmatic access and management of pfSense hosts for devops
-tasks feasible.</p>
+<p>This is a fork of <a href="https://github.com/ndejong/pfsense_fauxapi">FauxAPI 1.3</a> initially created to
+generate the 1.3_6 package, but then extended to include additional
+functionality and fixes needed to make it work smoothly with my
+<a href="https://github.com/barkerest/PfSenseFauxApi.Net">pfSenseFauxAPI.Net</a> library.</p>
+<p>The version "f38" refers to this being fork number 38 of the original repo at the time I created the fork.
+This version string will serve to differentiate my version from the original version.  My version is not
+API compatible with the original version.  As such, the original client libraries may not work with my
+version.</p>
 <h2>
 <a id="user-content-api-action-summary" class="anchor" href="#api-action-summary" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Action Summary</h2>
 <ul>
+<li>
+<a href="#api_version">api_version</a> - Gets the API version.</li>
 <li>
 <a href="#user-content-alias_update_urltables">alias_update_urltables</a> - Causes the pfSense host to immediately update any urltable alias entries from their (remote) source URLs.</li>
 <li>
@@ -86,6 +93,8 @@ tasks feasible.</p>
 <a href="#user-content-system_reboot">system_reboot</a> - Reboots the pfSense system.</li>
 <li>
 <a href="#user-content-system_stats">system_stats</a> - Returns various useful system stats.</li>
+<li>
+<a href="#user-content-system_info">system_info</a> - Returns various useful system info.</li>
 </ul>
 <h2>
 <a id="user-content-approach" class="anchor" href="#approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Approach</h2>
@@ -117,12 +126,12 @@ included below and refer to a the resolution to <a href="https://github.com/ndej
 now provides the ability to issue function calls directly into pfSense.</em></p>
 <h2>
 <a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
-<p>Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to
+<p>This package will likely never make it to the pfSense FreeBSD-ports tree, you will need to
 install manually from <strong>root</strong> as shown:-</p>
-<div class="highlight highlight-source-shell"><pre><span class="pl-c1">set</span> fauxapi_base_package_url=<span class="pl-s"><span class="pl-pds">'</span>https://raw.githubusercontent.com/ndejong/pfsense_fauxapi_packages/master<span class="pl-pds">'</span></span>
-<span class="pl-c1">set</span> <span class="pl-c1">set</span> fauxapi_latest=<span class="pl-s"><span class="pl-pds">`</span>fetch -qo - <span class="pl-smi">${fauxapi_base_package_url}</span>/LATEST<span class="pl-pds">`</span></span>
-fetch <span class="pl-smi">${fauxapi_base_package_url}</span>/<span class="pl-smi">${fauxapi_latest}</span>
-pkg-static install <span class="pl-smi">${fauxapi_latest}</span></pre></div>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">set</span> PFFA_PKG_URL=<span class="pl-s"><span class="pl-pds">'</span>https://raw.githubusercontent.com/barkerest/pfsense_fauxapi/master/packages<span class="pl-pds">'</span></span>
+<span class="pl-c1">set</span> PFFA_PKG_NAME=<span class="pl-s"><span class="pl-pds">`</span>fetch -qo - <span class="pl-smi">${PFFA_PKG_URL}</span>/LATEST<span class="pl-pds">`</span></span>
+fetch <span class="pl-smi">${PFFA_PKG_URL}</span>/<span class="pl-smi">${PFFA_PKG_NAME}</span>
+pkg-static install <span class="pl-smi">${PFFA_PKG_NAME}</span></pre></div>
 <p>Installation and de-installation is quite straight forward, further examples can
 be found in the <code>README.md</code> located <a href="https://github.com/ndejong/pfsense_fauxapi_packages">here</a>.</p>
 <p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi_packages/blob/master/SHA256SUMS"><code>SHA256SUMS</code></a></p>
@@ -133,8 +142,14 @@ pfSense host before you continue, see the API Authentication section below.</p>
 <h2>
 <a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h2>
 <h4>
+<a id="user-content-net-core" class="anchor" href="#net-core" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>.NET Core</h4>
+<p>A <a href="https://github.com/barkerest/PfSenseFauxApi.Net">.NET Core interface</a> to pfSense was my most
+desired end-goal.  The original FauxAPI was a good starting point.  The .Net Core interface will
+be installable via nuget once released.</p>
+<h4>
 <a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
-<p>A <a href="https://github.com/ndejong/pfsense_fauxapi_client_python">Python interface</a>
+<p><strong>CAUTION:</strong> The f38 API version may not function with this library.<br>
+A <a href="https://github.com/ndejong/pfsense_fauxapi_client_python">Python interface</a>
 to pfSense was perhaps the most desired end-goal at the onset of the FauxAPI
 package project.  Anyone that has tried to parse the pfSense <code>config.xml</code> files
 using a Python based library will understand that things don't quite work out as
@@ -145,11 +160,11 @@ expected or desired.</p>
 <p>Use of the package should be easy enough as shown</p>
 <div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> pprint, sys
 <span class="pl-k">from</span> PfsenseFauxapi.PfsenseFauxapi <span class="pl-k">import</span> PfsenseFauxapi
-PfsenseFauxapi <span class="pl-k">=</span> FauxapiLib(<span class="pl-s"><span class="pl-pds">'</span>&lt;host-address&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-key&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-secret&gt;<span class="pl-pds">'</span></span>)
+PfsenseFauxapi <span class="pl-k">=</span> PfsenseFauxapi(<span class="pl-s"><span class="pl-pds">'</span>&lt;host-address&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-key&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-secret&gt;<span class="pl-pds">'</span></span>)
 
-aliases <span class="pl-k">=</span> FauxapiLib.config_get(<span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>)
+aliases <span class="pl-k">=</span> PfsenseFauxapi.config_get(<span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>)
 <span class="pl-c"><span class="pl-c">#</span># perform some kind of manipulation to `aliases` here ##</span>
-pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>))</pre></div>
+pprint.pprint(PfsenseFauxapi.config_set(aliases, <span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>))</pre></div>
 <p>It is recommended to review the <a href="https://github.com/ndejong/pfsense_fauxapi_client_python/tree/master/examples">Python code examples</a>
 to observe worked examples with the client library.  Of small note is that the
 Python library supports the ability to get and set single sections of the pfSense
@@ -168,13 +183,15 @@ confirm operation.</li>
 </ul>
 <h4>
 <a id="user-content-command-line" class="anchor" href="#command-line" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Command Line</h4>
-<p>As distinct from the Bash library as described below the Python pip also introduces
+<p><strong>CAUTION:</strong> The f38 API version may not function with this library.<br>
+As distinct from the Bash library as described below the Python pip also introduces
 a command-line tool to interact with the API, which makes a wide range of actions
 possible directly from the command line, for example</p>
 <div class="highlight highlight-source-shell"><pre>fauxapi --host 192.168.1.200 gateway_status <span class="pl-k">|</span> jq <span class="pl-c1">.</span></pre></div>
 <h4>
 <a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
-<p>The <a href="https://github.com/ndejong/pfsense_fauxapi_client_bash">Bash client library</a>
+<p><strong>CAUTION:</strong> The f38 API version may not function with this library.<br>
+The <a href="https://github.com/ndejong/pfsense_fauxapi_client_bash">Bash client library</a>
 makes it possible to add a line with <code>source pfsense-fauxapi.sh</code> to your bash script
 and then access a pfSense host configuration directly as a JSON string</p>
 <div class="highlight highlight-source-shell"><pre><span class="pl-c1">source</span> pfsense-fauxapi.sh
@@ -188,7 +205,8 @@ fauxapi_config_set <span class="pl-k">&lt;</span>host-address<span class="pl-k">
 idea on usage.</p>
 <h4>
 <a id="user-content-nodejstypescript" class="anchor" href="#nodejstypescript" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NodeJS/TypeScript</h4>
-<p>A NodeJS client has been developed by a third party and is available here</p>
+<p><strong>CAUTION:</strong> The f38 API version may not function with this library.<br>
+A NodeJS client has been developed by a third party and is available here</p>
 <ul>
 <li>NPMJS: <a href="https://www.npmjs.com/package/faux-api-client" rel="nofollow">npmjs.com/package/faux-api-client</a>
 </li>
@@ -197,7 +215,8 @@ idea on usage.</p>
 </ul>
 <h4>
 <a id="user-content-php" class="anchor" href="#php" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PHP</h4>
-<p>A PHP client has been developed by a third party and is available here</p>
+<p><strong>CAUTION:</strong> The f38 API version may not function with this library.<br>
+A PHP client has been developed by a third party and is available here</p>
 <ul>
 <li>Packagist: <a href="https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client" rel="nofollow">packagist.org/packages/travisghansen/pfsense_fauxapi_php_client</a>
 </li>
@@ -325,6 +344,31 @@ improvement in this regard might be to implement certificate pinning at the
 client side to hence remove scope for man-in-middle concerns.</p>
 <hr>
 <h3>
+<a id="user-content-api_version" class="anchor" href="#api_version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>api_version</h3>
+<ul>
+<li>Gets the API version.</li>
+<li>HTTP: <strong>GET</strong>
+</li>
+<li>Params: none</li>
+</ul>
+<p><em>Example Request</em></p>
+<div class="highlight highlight-source-shell"><pre>curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
+    <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=api_version<span class="pl-pds">"</span></span></pre></div>
+<p><em>Example Response</em></p>
+<div class="highlight highlight-source-js"><pre>{
+    <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>598ec756b4d09<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>alias_update_urltables<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>version<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>1.30_1<span class="pl-pds">"</span></span>
+    }
+}</pre></div>
+<hr>
+<h3>
 <a id="user-content-alias_update_urltables" class="anchor" href="#alias_update_urltables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>alias_update_urltables</h3>
 <ul>
 <li>Causes the pfSense host to immediately update any urltable alias entries from their (remote)
@@ -352,14 +396,15 @@ tables are updated.</li>
   <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>alias_update_urltables<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>updates<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-      <span class="pl-s"><span class="pl-pds">"</span>bruteforceblocker<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-        <span class="pl-s"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>status<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
-          <span class="pl-s"><span class="pl-pds">"</span>no changes.<span class="pl-pds">"</span></span>
-        ]
-      }
-    }
+    <span class="pl-s"><span class="pl-pds">"</span>updates<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
+        {
+            <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>bruteforceblocker<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>status<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
+                <span class="pl-s"><span class="pl-pds">"</span>no changes.<span class="pl-pds">"</span></span>
+            ]
+        }
+    ]
   }
 }</pre></div>
 <hr>
@@ -878,9 +923,67 @@ following standard pfSense send_event combinations are permitted:-
   }
 }</pre></div>
 <hr>
+<h3>
+<a id="user-content-system_info" class="anchor" href="#system_info" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_info</h3>
+<ul>
+<li>Returns various useful system info.</li>
+<li>HTTP: <strong>GET</strong>
+</li>
+<li>Params: none</li>
+</ul>
+<p><em>Example Request</em></p>
+<div class="highlight highlight-source-shell"><pre>curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
+    <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=system_info<span class="pl-pds">"</span></span></pre></div>
+<p><em>Example Response</em></p>
+<div class="highlight highlight-source-js"><pre>{
+    <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5e1d8ceb8ff47<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>system_info<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>info<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">"</span>sys<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+                <span class="pl-s"><span class="pl-pds">"</span>platform<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+                    <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>VMware<span class="pl-pds">"</span></span>,
+                    <span class="pl-s"><span class="pl-pds">"</span>descr<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>VMware Virtual Machine<span class="pl-pds">"</span></span>
+                },
+                <span class="pl-s"><span class="pl-pds">"</span>serial_no<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>device_id<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>719e8c91c2c43b820400<span class="pl-pds">"</span></span>
+            },
+            <span class="pl-s"><span class="pl-pds">"</span>pfsense_version<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+                <span class="pl-s"><span class="pl-pds">"</span>product_version_string<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>2.4.5-DEVELOPMENT<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>product_version<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>2.4.5-DEVELOPMENT<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>product_version_patch<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>
+            },
+            <span class="pl-s"><span class="pl-pds">"</span>pfsense_remote_version<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+                <span class="pl-s"><span class="pl-pds">"</span>version<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>2.4.5.a.20200112.1821<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>installed_version<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>2.4.5.a.20191218.2354<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>pkg_version_compare<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>&lt;<span class="pl-pds">"</span></span>
+            },
+            <span class="pl-s"><span class="pl-pds">"</span>os_verison<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>FreeBSD 11.3-STABLE<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>cpu_type<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+                <span class="pl-s"><span class="pl-pds">"</span>cpu_model<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>cpu_count<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>4<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>logic_cpu_count<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>4 package(s)<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>cpu_freq<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
+            },
+            <span class="pl-s"><span class="pl-pds">"</span>kernel_pti_status<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>enabled<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>mds_mitigation<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>inactive<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>bios<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+                <span class="pl-s"><span class="pl-pds">"</span>vendor<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Phoenix Technologies LTD<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>version<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>6.00<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>date<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>07/29/2019<span class="pl-pds">"</span></span>
+            }
+        }
+    }
+}</pre></div>
+<hr>
 <h2>
 <a id="user-content-versions-and-testing" class="anchor" href="#versions-and-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Versions and Testing</h2>
-<p>The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5 and 2.4.3 it has
+<p>The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5, 2.4.3, 2.4.4 it has
 not (yet) been tested against 2.3.0 or 2.3.1.  Further, it is apparent that the pfSense
 packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be
 backported to anything prior to 2.3.0.</p>
@@ -952,7 +1055,8 @@ in the project repo as a better place to keep non-package files, <code>client-li
 </ul>
 <h2>
 <a id="user-content-fauxapi-license" class="anchor" href="#fauxapi-license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI License</h2>
-<pre><code>Copyright 2016-2018 Nicholas de Jong  
+<pre><code>Copyright 2016-2019 Nicholas de Jong
+Copyright 2020 Beau Barker
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
